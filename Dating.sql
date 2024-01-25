@@ -1,3 +1,15 @@
+USE MASTER
+
+IF DB_ID('DatingAppDb') IS NOT NULL
+BEGIN
+	ALTER DATABASE DatingAppDb SET SINGLE_USER WITH ROLLBACK IMMEDIATE
+	DROP DATABASE DatingAppDb
+END
+
+Create Database DatingAppDb
+Use DatingAppDb
+Go
+
 Create Table Logins(
 	LoginID int primary key identity(1,1) not null,
 	[Username] nvarchar(20) unique not null,
@@ -47,6 +59,9 @@ Create Table Likes(
 	LikeId int primary key identity(1,1) not null,
 	LikerId int foreign key references Profiles(ProfileId),
 	LikedId int foreign key references Profiles(ProfileId),
-	[Status] int not null,
-
+	[Status] int not null default 0
+	
 )
+
+Alter table Likes
+add CONSTRAINT UC_Likes UNIQUE (LikerId,LikedId)
